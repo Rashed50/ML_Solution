@@ -1,5 +1,5 @@
 """
-ASGI config for django_nextjs project.
+ASGI config for ML_Solution project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nextjs.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ML_Solution.settings')
 
 application = get_asgi_application()

@@ -1,4 +1,4 @@
-// File: E:\My_Work\django_nextjs\django_nextjs\frontend\src\app\invoice\page.tsx
+// File: E:\My_Work\ML_Solution\ML_Solution\frontend\src\app\invoice\page.tsx
 import * as entry from '../../../../src/app/invoice/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
