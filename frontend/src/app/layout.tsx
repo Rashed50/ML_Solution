@@ -51,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     {
       name: "Image Tools",
       items: [
+        { name: "Image Resize", href: "/ml/image_tocsv" },
         { name: "Transformation", href: "/ml/images" },
         { name: "Edge Detection", href: "/ml/edge" },
         { name: "Invoice", href: "/invoice" },

@@ -110,4 +110,66 @@ def imageProcessing(request):
         return JsonResponse({"image": img_base64})
 
     return JsonResponse({"error": "No file uploaded"}, status=400)
-  #  return JsonResponse(data)
+
+
+
+@csrf_exempt # Uncomment if you want to disable CSRF protection for this view
+def imageToCSV(request):     
+   # return JsonResponse({"error": "No file uploaded"}, status=400)
+    data = {
+        "status": "success",
+        "message": "File Uploaded Successfully",
+        "version": "1.0",
+        "file_name": request.FILES['file'].name if 'file' in request.FILES else None
+    }
+   
+    if request.method == "POST" and request.FILES.get("file"):
+        # Get uploaded file
+        uploaded_file = request.FILES["file"]
+        bbox = request.POST.get('bbox') #[X,Y, width, height]
+        bbox = bbox.split(',')
+        file_name = request.POST.get('file_name')
+        wave_length = file_name.split("_")[1][:-6]
+
+        # Read file bytes
+        file_bytes = uploaded_file.read()
+
+        # Convert bytes to numpy array
+        np_arr = np.frombuffer(file_bytes, np.uint8)
+
+        # Decode image with OpenCV
+        img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+        # Now `img` is an OpenCV image (numpy array)
+        # You can do OpenCV processing here
+        height, width, channels = img.shape
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray_avg = img.mean(axis=2)
+        mean_value = np.mean(gray_avg)
+        file_path = "output.txt"
+ 
+        output_string = f'{wave_length} {mean_value}\n'
+        with open(file_path, 'a') as file:
+            # write() takes a string. You must include newline characters (\n) yourself.
+            file.writelines(output_string)
+
+        # Rows in OpenCV correspond to the Y-axis
+        start_row = int(bbox[1]) # Y coordinate
+        end_row = int(bbox[1] + bbox[3])
+        # # # Columns in OpenCV correspond to the X-axis
+        start_col = int(bbox[0])
+        end_col = int(bbox[1] + bbox[2])
+        # --- 4. Crop the Image using NumPy Slicing ---
+        # Slicing format: [rows_start:rows_end, columns_start:columns_end]
+        cropped_image = gray[start_row:end_row, start_col:end_col]
+    
+
+         # Encode image as PNG in memory
+        _, buffer = cv2.imencode(".png", cropped_image)
+        img_base64 = base64.b64encode(buffer).decode("utf-8")
+
+        # Return as JSON
+        return JsonResponse({"image": img_base64,'bbox':bbox})
+
+    return JsonResponse({"error": "No file uploaded"}, status=400)
+ 

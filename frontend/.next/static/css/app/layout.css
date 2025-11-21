@@ -354,6 +354,9 @@
   .h-64 {
     height: calc(var(--spacing) * 64);
   }
+  .h-auto {
+    height: auto;
+  }
   .max-h-80 {
     max-height: calc(var(--spacing) * 80);
   }
